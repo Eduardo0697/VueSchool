@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Course</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Aqui no esta declarado Vue -->
+    <div id="shopping-list">
+        <!-- Aqui si! -->
+        <div class="container">
+            <div>
+                <h1>Ejemplo 1</h1>
+                <h2>{{ header }}</h2>
+                <input type="text" v-model="header">
+                <!-- Con v-model enlazamos el input al dato header del atributo data  de esta forma esta sincronizado
+                Con Jquery o vanilla JS hubieramos tenido que primero añadir un event-listener al input
+                y luego actualizar el h1 cada que el usuario escribiera algo-->
+            </div>
+
+            <div>
+                <h1>Ejemplo 2</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <h2>{{ header ? header : 'Welcome' }}</h2>
+
+                <!-- Podemos usar Expresiones de JS dentro de {{ }} con la limitante de solo poder evaluar una expresion a la vez
+                 Tampoco podemos declarar variables o evaluar expresiones como con un if()
+                 Para esto se pueden usar operadores ternarios-->
+                <input type="text" v-model="header">
+                <!-- Con v-model enlazamos el input al dato header del atributo data  de esta forma esta sincronizado
+                Con Jquery o vanilla JS hubieramos tenido que primero añadir un event-listener al input
+                y luego actualizar el h1 cada que el usuario escribiera algo-->
+            </div>
+
+            <div>
+                <h1>Ejemplo 3</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <ul>
+                    <li v-for="item in items" >{{ item }}</li>
+                    <!-- Al se reactivo nos permite agregar mas productos sin necesidad de recargar
+                     Por ejemplo ahora podemos agregar un producto desde consola
+                     shoppingList.$data.items.push('Algo') o quitarlos con
+                     shoppingList.$data.items.pop)
+                     Entonces con esto podemos olvidarnos de quitar o poner elementos con selectores de Jquery -->
+                </ul>
+            </div>
+
+            <div>
+                <h1>Ejemplo 4</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <input v-model="newItem" type="text" placeholder="Add an Item">
+                <!-- Con esto atraves del v-model enlazamos to do lo que esta en el input con la variable
+                newItem Con VueDevTools podemos ver como se actualiza newItem y podemos editarlo
+                Nota: Si devTools no funciona o reconoce Vue, debemos ir a las extension y modificar los settings
+                Allow acces to file URLS-->
+                <ul>
+                    <li v-for="item in items" >{{ item }}</li>
+                </ul>
+            </div>
+
+            <div>
+                <h1>Ejemplo 5</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <!--
+                Para poder añadir un nuevo elemento a la lista podemos hacerlo desde consola con $vm0
+                $vm0.items  Vemos los items actuales
+                Primero debemos establecer newItem a algun valor
+                $vm0.newItem = 'Algo'
+                Luego agregarlo a Items
+                $vm0.items.push($vm0.newItem)
+                -->
+                <!-- Ahora implementaremos este proceso en nuestro html-->
+                <div class="form">
+                    <input v-model="newItem" type="text" placeholder="Add an Item" v-on:keyup.enter="items.push(newItem)">
+                    <button class="btn btn-primary" @click="items.push(newItem)" >Save Item</button>
+                    <!-- Con v-on especificamos que se tiene que hacer cuando una accion se lleva acabo
+                    En el caso del boton puede ser click, hover, etc...
+                    Se pueden usar multiples v-on como para especificar que al dar enter haga la misma accion-->
+                    <!-- Se puede sustuir la sintaxis de v-on: con @-->
+                </div>
+
+
+                <ul>
+                    <li v-for="item in items" >{{ item }}</li>
+                </ul>
+            </div>
+
+
+        </div>
+
+    </div>
+    <!-- Aqui Tampoco -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script>
+
+        /* Ejemplo 1 -3
+        *  var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
+            el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
+            data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
+                header: 'Shopping list app',
+                items: [
+                    '10 party hats',
+                    '2 board games',
+                    '20 cups',
+                ]
+            }
+        });
+        * */
+
+        //Ejemplo 4
+        var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
+            el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
+            data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
+                header: 'Shopping list app',
+                newItem : '',
+                items: [
+                    '10 party hats',
+                    '2 board games',
+                    '20 cups',
+                ]
+            }
+        });
+    </script>
+
+
+</body>
+</html>
