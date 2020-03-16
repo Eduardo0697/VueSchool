@@ -86,6 +86,136 @@
                 </ul>
             </div>
 
+            <div>
+                <h1>Ejemplo 6</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <!-- Trasladeremos lo anterior que se esta repitiendo a un metodo de Vue-->
+                <div class="form">
+                    <input v-model="newItem" type="text" placeholder="Add an Item" @keyup.enter="saveItem">
+                    <button class="btn btn-primary" @click="saveItem" >Save Item</button>
+                </div>
+
+
+                <ul>
+                    <li v-for="item in items" >{{ item }}</li>
+                </ul>
+            </div>
+
+            <div>
+                <h1>Ejemplo 7</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+
+                <!-- Agregamos 2 botones que se van a renderizar condicionalmente dependiendo el estado-->
+                <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+                <button v-else class="btn btn-danger" @click="changeState('default')">Cancel</button>
+                <!-- Podemos ver que cambiando el estado podemos renderizar condicionalmente ahora desde devtools
+                Por lo que crearemos un metoodo para cambiar el estado-->
+
+
+                <!-- Vue nos prporciona v-if y v-else para poder renderizar contenido condicionalmente -->
+                <!-- Podemos renderizar condicionalmente el form cuando el estado es edit
+                Si cambiamos state a edit en vuedevtools este aparacera-->
+                <div v-if="state === 'edit'" class="form">
+                    <input v-model="newItem" type="text" placeholder="Add an Item" @keyup.enter="saveItem">
+                    <button class="btn btn-primary" @click="saveItem" >Save Item</button>
+                </div>
+                <ul>
+                    <li v-for="item in items" >{{ item }}</li>
+                </ul>
+                <p v-if="items.length === 0">No tienes ningun producto</p>
+            </div>
+
+            <div>
+                <h1>Ejemplo 8</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+                <button v-else class="btn btn-danger" @click="changeState('default')">Cancel</button>
+
+                <div v-if="state === 'edit'" class="form">
+                    <input v-model="newItem" type="text" placeholder="Add an Item" @keyup.enter="saveItem">
+                    <button class="btn btn-primary" :disabled="newItem.length === 0" @click="saveItem" >Save Item</button>
+                </div>
+                <!-- Con v-bind podemos manejar cualquier atributo de HTML a nuestro data -->
+                <!-- 1.
+                <a v-bind:href="newItem" target="_blank">DinamycLink</a>
+                -->
+                <!-- De esta forma podemos hacer dinamicos nuestro botones como habilitarlos o no para prevenir
+                agregar datos vacios añadiendo v-bind:disabled"" a nuestro boton Save ITem-->
+
+                <!-- v-bind podemos reducirlo a la sintaxis de 'v-bind:' a  ':' unicamente-->
+
+
+                <ul>
+                    <li v-for="item in items" >{{ item }}</li>
+                </ul>
+                <p v-if="items.length === 0">No tienes ningun producto</p>
+            </div>
+
+            <div>
+                <!-- Cuando usamos enlazado de atributos (binding) podemos pasar datos adicionales para saber que clases cargar
+                Para empezar modificaremos nuestros atributo Items a un arreglo de objetos item
+                Tambien debemos modificar nuestro metodo saveITem para que guarde un objeto de tipo item-->
+
+                <!-- Para cargar clases dinamicas Vue tiene 2 opcioens para hacerlo con array sintax u object sintax
+                Object sintax es mas consisa a la hora de añadir clases dinamicas-->
+                <h1>Ejemplo 9</h1>
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+                <button v-else class="btn btn-danger" @click="changeState('default')">Cancel</button>
+                <div v-if="state === 'edit'" class="form">
+                    <input v-model="newItem" type="text" placeholder="Add an Item" @keyup.enter="saveItem">
+                    <button class="btn btn-primary" :disabled="newItem.length === 0" @click="saveItem" >Save Item</button>
+                </div>
+                <ul>
+                    <!-- Aqui añadaremos las clases dinamicas-->
+                    <!--`
+                    Object Sintax : { 'text-danger': item.purchased }
+                    Array Sintax: [] Nos da mas flexibilidad para cambiar entre 2 clases
+                    Tambien podemos añadir clases directas con class
+                    [ item.purchased  ? dangerClass : 'text-primary', item.highPriority ? 'bg-dark' : '']
+                    -->
+                    <!-- Si queremos las cosas simples o no necesitamos mucha complejidad podemos recurrir a object sintax -->
+
+
+                    <li v-for="item in items" class="m-3" :class="{ 'text-danger': item.purchased }" @click="togglePurchased(item)">{{ item.label }}</li>
+
+
+                    <!-- Para cambiar este estado dinamico podemos agregar un metodo que modifique el estado de itemPurschased
+                     agregando @click a nuestro enlace--->
+                </ul>
+                <p v-if="items.length === 0">No tienes ningun producto</p>
+            </div>
+
+            <div>
+                <h1>Ejemplo 10 Computed properties</h1>
+                <!--
+                 Computed properties nos permiten hacer transformaciones o calculos sobre data
+                 Podemos crear una computed propertie que nos indice el tamaño del texto en el input
+
+                 Son herramientas muy poderosas que nos ayudan a encapsular transformaciones o manipulaciones de datos
+                 y se mantienen sincronizados con los datos que referencian.
+
+                 Ahora vamos añadir un computed propertie que muestre nuestro item que agreguemos al principio
+
+
+                Para saber cuando usar metodos y cuando computedProperties
+
+                Los metodos los usamos cuando queremos cambias los datos
+                y computed properties cuando simplemente queremos cambiar la forma de presentacion de los datos
+                 -->
+                <h2>{{ header.toLocaleUpperCase() }}</h2>
+                <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add Item</button>
+                <button v-else class="btn btn-danger" @click="changeState('default')">Cancel</button>
+                <div v-if="state === 'edit'" class="form">
+                    <input v-model="newItem" type="text" placeholder="Add an Item" @keyup.enter="saveItem">
+                    <p>{{ characterCount }}</p>
+                    <button class="btn btn-primary" :disabled="newItem.length === 0" @click="saveItem" >Save Item</button>
+                </div>
+                <ul>
+                    <li v-for="item in reversedItems" class="m-3" :class="{ 'text-danger': item.purchased }" @click="togglePurchased(item)">{{ item.label }}</li>
+                </ul>
+                <p v-if="items.length === 0">No tienes ningun producto</p>
+            </div>
 
         </div>
 
@@ -110,8 +240,8 @@
             }
         });
         * */
-
-        //Ejemplo 4
+/*
+        //Ejemplo 4-5
         var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
             el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
             data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
@@ -122,6 +252,160 @@
                     '2 board games',
                     '20 cups',
                 ]
+            }
+        });
+
+ */
+/*
+        //Ejemplo 6
+        var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
+            el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
+            data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
+                header: 'Shopping list app',
+                newItem : '',
+                items: [
+                    '10 party hats',
+                    '2 board games',
+                    '20 cups',
+                ]
+            },
+            methods : {  //Podemos declarar metodos que encapsulan funcionalidades para nuestra instancia de Vue
+                //Algo a tener en cuenta en los metodos es que no tenemos acceso directo a los valores de data como
+                //con v-on, tenemos que referenciarlos usando this
+                //Podemos probar los metodos desde consola $vm0.saveItem() para probarlos
+                saveItem: function () {
+                    this.items.push(this.newItem);
+                    this.newItem = ''; //Con esto actualizamos el valor de NewItem
+                }
+            }
+        });
+
+ */
+
+        // //Ejemplo 7 - 8
+        // var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
+        //     el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
+        //     data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
+        //         state: 'default',  //Esto lo usaremos para renderizar condicionalmente el form, primero lo estableceremos a default
+        //         header: 'Shopping list app',
+        //         newItem : '',
+        //         items: [
+        //             // '10 party hats',
+        //             // '2 board games',
+        //             // '20 cups',
+        //         ]
+        //     },
+        //     methods : {  //Podemos declarar metodos que encapsulan funcionalidades para nuestra instancia de Vue
+        //         //Algo a tener en cuenta en los metodos es que no tenemos acceso directo a los valores de data como
+        //         //con v-on, tenemos que referenciarlos usando this
+        //         //Podemos probar los metodos desde consola $vm0.saveItem() para probarlos
+        //         saveItem: function () {
+        //             this.items.push(this.newItem);
+        //             this.newItem = ''; //Con esto actualizamos el valor de NewItem
+        //         },
+        //         changeState: function(newState) {
+        //             this.state = newState;
+        //             this.newItem = '';
+        //         }
+        //     }
+        // });
+
+        // //Ejemplo 9
+        // var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
+        //     el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
+        //     data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
+        //         state: 'default',  //Esto lo usaremos para renderizar condicionalmente el form, primero lo estableceremos a default
+        //         header: 'Shopping list app',
+        //         newItem : '',
+        //         dangerClass : 'text-danger',
+        //         items: [
+        //             {
+        //                 label: 'Product 1',
+        //                 purchased : false,
+        //                 highPriority : false
+        //             },
+        //             {
+        //                 label: 'Product 2',
+        //                 purchased : true,
+        //                 highPriority : false,
+        //             },
+        //             {
+        //                 label: 'Product 3',
+        //                 purchased : false,
+        //                 highPriority : true
+        //             },
+        //         ]
+        //     },
+        //     methods : {  //Podemos declarar metodos que encapsulan funcionalidades para nuestra instancia de Vue
+        //         saveItem: function () {
+        //             this.items.push({
+        //                 label: this.newItem,
+        //                 purchased : false
+        //             });
+        //             this.newItem = ''; //Con esto actualizamos el valor de NewItem
+        //         },
+        //         changeState: function(newState) {
+        //             this.state = newState;
+        //             this.newItem = '';
+        //         },
+        //         togglePurchased: function (item) {
+        //             item.purchased = !item.purchased;
+        //         }
+        //     }
+        // });
+
+        //Ejemplo 10
+        var shoppingList = new Vue({  // Se crea una instancia de Vue y se inicializa con un objeto
+            el: '#shopping-list',  //Con esto decimos donde Vue deberia existir en la pagina
+            data : {  //Data property es donde almacenamos los datos para que las instancias de Vue puedan usarlas
+                state: 'default',  //Esto lo usaremos para renderizar condicionalmente el form, primero lo estableceremos a default
+                header: 'Shopping list app',
+                newItem : '',
+                dangerClass : 'text-danger',
+                items: [
+                    {
+                        label: 'Product 1',
+                        purchased : false,
+                        highPriority : false
+                    },
+                    {
+                        label: 'Product 2',
+                        purchased : true,
+                        highPriority : false,
+                    },
+                    {
+                        label: 'Product 3',
+                        purchased : false,
+                        highPriority : true
+                    },
+                ]
+            },
+            computed: { // A diferencia de los metodos es importante que los computed retornen un valor siempre
+                characterCount(){ // Nos regresara el tamaño de nuestro input
+                    return this.newItem.length;
+                },
+                reversedItems() {
+                    return this.items.slice(0).reverse();
+                    //Se usa slice(0) porque queremos hacer una copia del array
+                    // de otra forma manipulariamos los datos y ese no es el objetivo de los computed properties
+                    //es solo transformar y manipular los datos para la capa de presentacion
+                }
+            },
+            methods : {  //Podemos declarar metodos que encapsulan funcionalidades para nuestra instancia de Vue
+                saveItem: function () {
+                    this.items.push({
+                        label: this.newItem,
+                        purchased : false
+                    });
+                    this.newItem = ''; //Con esto actualizamos el valor de NewItem
+                },
+                changeState: function(newState) {
+                    this.state = newState;
+                    this.newItem = '';
+                },
+                togglePurchased: function (item) {
+                    item.purchased = !item.purchased;
+                }
             }
         });
     </script>
